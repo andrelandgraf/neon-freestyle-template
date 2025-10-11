@@ -1,7 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  /**
+   * For freestyle.sh deployment, otherwise remove:
+   */
+  output: "standalone", 
+  images: {
+    unoptimized: true, 
+  },
 };
 
 export default nextConfig;
