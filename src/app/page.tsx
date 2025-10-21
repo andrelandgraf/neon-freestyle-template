@@ -1,8 +1,36 @@
+import { stackServerApp, toClientUser } from "@/lib/stack/server";
 import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { ProfileMenu } from "@/components/profile-menu";
 
-export default function Home() {
+export default async function Home() {
+  const user = await stackServerApp.getUser();
+  const clientUser = toClientUser(user);
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+    <div className="font-sans min-h-screen">
+      {/* Navbar */}
+      <nav className="border-b">
+        <div className="flex h-16 items-center px-4 sm:px-8 max-w-7xl mx-auto">
+          <div className="flex ml-auto items-center gap-4">
+            {clientUser ? (
+              <ProfileMenu
+                initials={clientUser.initials}
+                displayName={clientUser.displayName}
+                email={clientUser.email}
+                profileImageUrl={clientUser.profileImageUrl}
+              />
+            ) : (
+              <Button asChild>
+                <Link href="/handler/signin">Sign In</Link>
+              </Button>
+            )}
+          </div>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-[calc(100vh-4rem)] p-8 pb-20 gap-16 sm:p-20">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <Image
           className="dark:invert"
@@ -98,6 +126,7 @@ export default function Home() {
           Go to nextjs.org →
         </a>
       </footer>
+      </div>
     </div>
   );
 }
